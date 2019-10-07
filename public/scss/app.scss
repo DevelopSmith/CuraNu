@@ -146,7 +146,7 @@ $breakpoint-extra-large: 1200px; // 1200px
 	}
 }
 
-@media only screen and (min-width: $breakpoint-small) {
+@media only screen and (max-width: $breakpoint-small) {
 	.col-1,
 	.col-2,
 	.col-3,

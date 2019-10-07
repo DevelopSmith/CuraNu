@@ -8,7 +8,7 @@ import nl from './nl';
 i18n
 .use(initReactI18next)
 .init({
-    fallbackLng: 'en',
+    fallbackLng: 'nl',
 
     resources: {
         en: {
