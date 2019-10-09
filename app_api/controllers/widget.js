@@ -121,3 +121,14 @@ export const getWidgets = (req, res) => {
     });
 }
 
+export const telephonebookSearch = (req, res) => {
+	sendResJSON(res, 200, []);
+}
+
+export const uploadFile = (req, res) => {
+	sendResJSON(res, 200, 'http://localhost:3000/images/thumb_03.png');
+}
+
+export const createMicroblog = (req, res) => {
+	sendResJSON(res, 200, {});
+}

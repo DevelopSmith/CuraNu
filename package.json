@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "node -r esm app.js"
+    "start": "node app.js",
+    "dev": "nodemon --ignore 'react' --ignore 'public/scripts/*.js' -r esm app.js",
+    "test:headless": "cypress run",
+    "test": "cypress open",
+    "db:reset": "node resetDB.js",
+    "ci:dev": "start-server-and-test dev :3000 test",
+    "ci": "start-server-and-test start :3000 test:headless"
   },
   "author": "Develop Smith",
   "license": "ISC",
@@ -19,6 +25,7 @@
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.9",
     "@types/history": "^4.7.3",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.11",
@@ -37,7 +44,9 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "classnames": "^2.2.6",
     "css-loader": "^3.2.0",
+    "cypress": "^3.4.1",
     "extract-loader": "^3.1.0",
     "file-loader": "^4.0.0",
     "history": "^4.10.1",
@@ -49,8 +58,10 @@
     "react-beautiful-dnd": "^11.0.5",
     "react-bootstrap": "^0.32.1",
     "react-dom": "^16.1.1",
+    "react-dropzone": "^10.1.10",
     "react-i18next": "^10.11.2",
     "react-popover": "^0.5.10",
+    "react-popup": "^0.10.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.3.1",
@@ -61,6 +72,7 @@
     "redux-promise-middleware": "^5.0.0",
     "redux-thunk": "^2.2.0",
     "sass-loader": "^7.1.0",
+    "start-server-and-test": "^1.10.5",
     "style-loader": "^0.20.3",
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.3",

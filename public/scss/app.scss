@@ -78,6 +78,7 @@ $breakpoint-extra-large: 1200px; // 1200px
 .pull-left{ float: left; }
 .italic{ font-style: italic; }
 .uppercase{ text-transform: uppercase; }
+.hidden{ display: none; }
 
 .col-3 > img {
 	max-width: 100%;
@@ -179,6 +180,38 @@ body{
   
 .Popover-tipShape {
 	fill: #e5f0fa;
+}
+
+.mm-popup__box--uploader{
+	margin-left: -275px !important;
+	width: 550px !important;
+	height: 450px;
+
+	.uploader-drag-drop-area{
+		width: 510px;
+		height: 358px;
+		margin: 0;
+		border: 1px solid $bluishgray;
+		background-color: $lightgray;
+		border-radius: 8px;
+		cursor: pointer;
+
+		span, h3{
+			color: darken($bluishgray, 20%);
+			display: block;
+    		font-weight: bold;
+			text-align: center;
+			margin: 0;
+			line-height: 358px;
+			font-size: 30px;
+			text-transform: uppercase;
+			user-select: none;
+
+			&.bigger-span  {
+				font-size: 85px;
+			}
+		}
+	}
 }
 
 // Main Menu

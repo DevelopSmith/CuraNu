@@ -9,7 +9,7 @@ import Accordion from '../components/Accordion.tsx';
 import {
 	AddWidget, Events, News,
 	DirectLinks, Blogs, QualityManual, Polls, MyLinks,
-	TelephoneBook, Microblog, Groups
+	TelephoneBook, MicroblogWidget, Groups
 } from '../components/Widgets.tsx';
 
 interface IWidget {
@@ -22,6 +22,8 @@ interface IWidget {
 interface IState {
 	widgets: IWidget[],
 }
+
+const columns = ['col_1', 'col_2', 'col_3'];
 
 class Main extends Component<any, IState> {
 	state = {
@@ -191,7 +193,7 @@ class Main extends Component<any, IState> {
 				return <TelephoneBook />
 
 			case 'microblog':
-				return <Microblog collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
+				return <MicroblogWidget collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
 
 			case 'groups':
 				const {groups} = this.props.widgetsRdcr.widgetsData;
@@ -232,93 +234,42 @@ class Main extends Component<any, IState> {
 	getList = (columnId: string) => this.state.widgets.filter(item => item.column === columnId && item.hidden === false);
 
     render(){
-		const col_1 = this.getList('col_1')
-		const col_2 = this.getList('col_2')
-		const col_3 = this.getList('col_3')
-
 		return <section>
-			{/* Widgets */}
 			<div id="widgets-section" className="container">
 				<div className="row">
 
 					<DragDropContext onDragEnd={this.onDragEnd}>
-						<Droppable droppableId="col_1">
-							{(provided, snapshot) => (
-								<div
-									{...provided.droppableProps}
-									ref={provided.innerRef}
-									className="col-4"
-								>
-									{col_1.map((widget, index) => <Draggable
-										key={widget.id}
-										draggableId={widget.id}
-										index={index}
-									>
-										{(provided, snapshot) => (<div
-											ref={provided.innerRef}
-											{...provided.draggableProps}
-											{...provided.dragHandleProps}
-										>
-											{this.getBlockComponent(widget.id)}
-										</div>)}
-									</Draggable>)}
-	
-									{provided.placeholder}
-								</div>
-							)}
-						</Droppable>
+						{columns.map((column: string) => {
+							const columnList = this.getList(column);
 
-						<Droppable droppableId="col_2">
-							{(provided, snapshot) => (
-								<div
-									{...provided.droppableProps}
-									ref={provided.innerRef}
-									className="col-4"
-								>
-									{col_2.map((widget, index) => <Draggable
-										key={widget.id}
-										draggableId={widget.id}
-										index={index}
+							return (<Droppable key={column} droppableId={column}>
+								{(provided, snapshot) => (
+									<div
+										{...provided.droppableProps}
+										ref={provided.innerRef}
+										className="col-4"
+										id={column}
 									>
-										{(provided, snapshot) => (<div
-											ref={provided.innerRef}
-											{...provided.draggableProps}
-											{...provided.dragHandleProps}
+										{columnList.map((widget, index) => <Draggable
+											key={widget.id}
+											draggableId={widget.id}
+											index={index}
 										>
-											{this.getBlockComponent(widget.id)}
-										</div>)}
-									</Draggable>)}
-	
-									{provided.placeholder}
-								</div>
-							)}
-						</Droppable>
-
-						<Droppable droppableId="col_3">
-							{(provided, snapshot) => (
-								<div
-									{...provided.droppableProps}
-									ref={provided.innerRef}
-									className="col-4"
-								>
-									{col_3.map((widget, index) => <Draggable
-										key={widget.id}
-										draggableId={widget.id}
-										index={index}
-									>
-										{(provided, snapshot) => (<div
-											ref={provided.innerRef}
-											{...provided.draggableProps}
-											{...provided.dragHandleProps}
-										>
-											{this.getBlockComponent(widget.id)}
-										</div>)}
-									</Draggable>)}
-	
-									{provided.placeholder}
-								</div>
-							)}
-						</Droppable>
+											{(provided, snapshot) => (<div
+												id={`draggable-${column}-${widget.id}`}
+												ref={provided.innerRef}
+												{...provided.draggableProps}
+												{...provided.dragHandleProps}
+											>
+												{this.getBlockComponent(widget.id)}
+											</div>)}
+										</Draggable>)}
+		
+										{provided.placeholder}
+									</div>
+								)}
+							</Droppable>)
+						})}
 					</DragDropContext>
 
 				</div>

@@ -26,7 +26,7 @@ export default (props: any) => {
 			</div>
 
 			<div className="header-icon icon-right">
-				<img className="img-center" src="/images/close.svg" onClick={hide} />
+				<img className="img-center hide-icon" src="/images/close.svg" onClick={hide} />
 			</div>
 		</div>)}
 

@@ -7,20 +7,45 @@ import {SkyLightStateless} from 'react-skylight';
 
 // @ts-ignore
 import NotificationsPopover from './NotificationsPopover.tsx';
-// @ts-ignore
 import {loadUserDetails} from '../actions/userActions.ts';
+import {searchInTelephoneBook} from '../actions/widgetsActions.ts';
 
 interface IState {
 	showNotificationsPopover: Boolean,
 	showSettingsModal: Boolean,
-	language: string
+	language: string,
+	searchWord: string,
+	shake: Boolean
 }
 
 class Header extends Component<any, IState> {
     state = {
         showNotificationsPopover: false,
 		showSettingsModal: false,
-		language: 'nl'
+		language: 'nl',
+        searchWord: '',
+        shake: false,
+    }
+
+    shake = () => {
+        this.setState({ shake: true });
+
+        setTimeout(() => {
+            this.setState({ shake: false }); 
+        }, 1500);
+    }
+
+    searchTelephoneBook = () => {
+        if(this.state.searchWord != ''){
+            // do the search
+            this.props.searchInTelephoneBook(this.state.searchWord);
+        }else{
+            this.shake();
+        }
+	}
+	
+	updateTelephoneBookSearch = (e: any) => {
+        this.setState({ searchWord: e.target.value })
     }
 
 	toggleNotificationsPopover = (status: Boolean) => this.setState({ showNotificationsPopover: status });
@@ -37,7 +62,7 @@ class Header extends Component<any, IState> {
 
     render(){
 		const {t} = this.props;
-		const {showNotificationsPopover, showSettingsModal, language} = this.state;
+		const {showNotificationsPopover, showSettingsModal, language, searchWord, shake} = this.state;
 		const {notifications} = this.props.userRdcr;
 
         const popoverProps = {
@@ -132,9 +157,9 @@ class Header extends Component<any, IState> {
 						</li>
 					</ul>
 
-					<div id="search-box">
-						<input type="search" placeholder={t('search')} />
-						<div className="search-button">
+					<div id="search-box" className={shake ? 'shake' : ''}>
+						<input type="search" placeholder={t('search')} value={searchWord} onChange={ e => this.updateTelephoneBookSearch(e)} />
+						<div className="search-button" onClick={this.searchTelephoneBook}>
 							<img src="/images/zoeken.svg" className="img-center" alt={t('search')} />
 						</div>
 					</div>
@@ -155,6 +180,7 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => {
 	return {
 		loadUserDetails: () => dispatch(loadUserDetails()),
+        searchInTelephoneBook: (searchWord: string) => dispatch(searchInTelephoneBook(searchWord)),
 	};
 };
 

@@ -1,10 +1,15 @@
 import React from 'react';
+import { connect } from "react-redux";
 import { withTranslation, WithTranslation } from 'react-i18next';
 
 // @ts-ignore
 import Widget from './Widget.tsx';
 // @ts-ignore
+import Microblog from './Microblog.tsx';
+// @ts-ignore
 import history from '../helpers/history.ts';
+
+import {searchInTelephoneBook} from '../actions/widgetsActions.ts';
 
 interface IEvent {
     title: string,
@@ -253,6 +258,7 @@ export const MyLinks = withTranslation(['translations'], {})((props: IProps) => 
 // Third Column
 class TelephoneBookClass extends React.Component<any> {
     state = {
+        searchWord: '',
         shake: false
     }
 
@@ -264,17 +270,30 @@ class TelephoneBookClass extends React.Component<any> {
         }, 1500);
     }
 
+    searchTelephoneBook = () => {
+        if(this.state.searchWord != ''){
+            // do the search
+            this.props.searchInTelephoneBook(this.state.searchWord);
+        }else{
+            this.shake();
+        }
+    }
+
+    updateTelephoneBookSearch = (e: any) => {
+        this.setState({ searchWord: e.target.value })
+    }
+
 	render(){
         const { t } = this.props;
-        const { shake } = this.state;
+        const { searchWord, shake } = this.state;
 
         return(<div className="telephone-book">
             <h2 className="title uppercase">{t('telephone_book')}</h2>
             <h4 className="sub-title">{t('telephone_book_subtitle')}</h4>
 
             <div className={shake ? 'search-box shake' : 'search-box'}>
-                <input type="search" placeholder={t('search')} />
-                <div className="search-button" onClick={this.shake}>
+                <input type="search" placeholder={t('search')} value={searchWord} onChange={ e => this.updateTelephoneBookSearch(e)} />
+                <div className="search-button" onClick={this.searchTelephoneBook}>
                     <img src="/images/zoeken.svg" className="img-center" alt={t('search')}/>
                 </div>
             </div>
@@ -282,9 +301,21 @@ class TelephoneBookClass extends React.Component<any> {
     }
 }
 
-export const TelephoneBook = withTranslation(['translations'], {})(TelephoneBookClass);
+const mapStateToProps = (state: any) => {
+    return {
+        widgetsRdcr: state.widgetsReducer,
+    };
+};
 
-export const Microblog = withTranslation(['translations'], {})((props: IProps) => {
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        searchInTelephoneBook: (searchWord: string) => dispatch(searchInTelephoneBook(searchWord)),
+    };
+};
+
+export const TelephoneBook = withTranslation(['translations'], {})(connect(mapStateToProps, mapDispatchToProps)(TelephoneBookClass));
+
+export const MicroblogWidget = withTranslation(['translations'], {})((props: IProps) => {
     const { collapse, collapsed, hide, t } = props;
 
 	return(
@@ -298,39 +329,7 @@ export const Microblog = withTranslation(['translations'], {})((props: IProps) =
             collapsed={collapsed}
             hide={hide}
         >
-            <div className="microblog-wrap">
-                <textarea className="microblog-input" rows={10}></textarea>
-
-                <div>
-                    <img src="/images/camera.svg" className="pull-left icon" />
-                    <img src="/images/link.svg" className="pull-left icon" />
-                    <button className="primary-button pull-right uppercase">{t('place')}</button>
-                </div>
-
-                <div className="clearfix"></div>
-            </div>
-
-            <div className="row post-meta">
-                <div className="col-3">
-                    <img src="/images/author-01.png" />
-                </div>
-                <div className="col-6">
-                    <span className="title pull-left">Ria de Vries</span>
-                    <br />
-                    <span className="date">12/09/2016 - 11:10</span>
-                </div>
-                <div className="col-3" style={{textAlign: 'right'}}>
-                    <img src="/images/like.svg" style={{height: 15, verticalAlign: 'middle'}} />
-                    <span className="likes-comments-count">{0}</span>
-                    <div className="clearfix"></div>
-                </div>
-            </div>
-
-            <div className="text">Nieuwe campagne CuraNed gisteren van start gegaan</div>
-            <img src="/images/banner.png" />
-            <br/>
-            <br/>
-            <strong className="bold">Lees meer en reacties (0)</strong>
+            <Microblog />
         </Widget>
     );
 });

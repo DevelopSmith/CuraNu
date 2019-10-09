@@ -3,6 +3,8 @@ import { Router, Switch, Route } from 'react-router-dom'
 import { render } from 'react-dom'
 import { Provider } from "react-redux"
 import { I18nextProvider } from 'react-i18next'
+import Popup from 'react-popup';
+import 'react-popup/style.css';
 
 import store from './store.ts'
 import i18n from './i18n/index.ts'
@@ -24,6 +26,7 @@ class App extends React.Component {
 		return (
 			<Router history={browserHistory}>
 				<div style={{height: '100%'}}>
+					<Popup />
 					<Header />
 
 					<Switch>

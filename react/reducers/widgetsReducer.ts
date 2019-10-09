@@ -4,6 +4,14 @@ interface IAccordionItem {
     collapsed: Boolean
 }
 
+interface IMicroblog {
+    author: string,
+    url: string,
+    content: string,
+    image: string,
+    date: Date
+}
+
 interface IWidgetsData {
 	accordion: IAccordionItem[],
 	groups: [],
@@ -12,12 +20,13 @@ interface IWidgetsData {
 	qualityManual: [],
 	myLinks: [],
 	directLinks: [],
-	blog: {}
+	blog: IMicroblog
 }
 
 interface IState {
 	widgetsData: IWidgetsData,
-	telephoneBookSearchResults: []
+	telephoneBookSearchResults: [],
+	microblogImageUrl: string
 }
 
 const initialState: IState = {
@@ -29,9 +38,10 @@ const initialState: IState = {
 		qualityManual: [],
 		myLinks: [],
 		directLinks: [],
-		blog: {}
+		blog: {} as IMicroblog
 	},
 	telephoneBookSearchResults: [],
+	microblogImageUrl: ''
 }
 
 export default (state: IState = initialState, action: any) => {
@@ -65,6 +75,29 @@ export default (state: IState = initialState, action: any) => {
 			state = {
 				...state,
 				telephoneBookSearchResults: action.payload
+			};
+
+            break;
+        }
+
+		case 'CREATED_MICROBLOG': {
+			// const microblog: IMicroblog = action.payload;
+
+			state = {
+				...state,
+				widgetsData: {
+					...state.widgetsData,
+					// blog: microblog
+				}
+			};
+
+            break;
+        }
+
+		case 'UPLOADED_NEW_FILE': {
+			state = {
+				...state,
+				microblogImageUrl: action.payload
 			};
 
             break;
