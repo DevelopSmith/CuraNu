@@ -11,3 +11,11 @@ I have converted the design to a working template using **React.js** and **Redux
 - Redux: I know that it is an overkill for a simple task like this but I thought it should be added anyway.
 - API calls: the content of the widgets is being pulled from the API using Node.js and Express.
 - I have added a simple page for some of the pages including "Events", "News", "Groups", etc. I also added a 404 page.
+
+
+### TypeScript
+I have implemented TypeScript for the React part but I didn't add it to the Node.js part as the focus of this assessment part is React not Node.js
+
+
+### APIs
+I wanted to pull the content of the widgets from a remote API instead of hard-coding the content in the `JSX` code. The API endpoints has the content hard-coded inside their functions but they return the data as if it was a real API.

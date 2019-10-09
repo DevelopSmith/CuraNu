@@ -19,7 +19,7 @@ export default (props: any) => {
 			</div>}
 
 			<div className="title-section">
-				<h2 className="title">{widgetTitle}</h2>
+				<h2 className="title" title={widgetTitle}>{widgetTitle}</h2>
 				<div className="collapse-icon" onClick={collapse}>
 					<img className="img-center" src={collapsed ? '/images/arrow-right.svg' : '/images/arrow-down.svg'} />
 				</div>

@@ -1,4 +1,7 @@
 const path = require('path');
+const autoprefixer = require('autoprefixer')
+
+const getPostcssPlugins = () => [autoprefixer({ overrideBrowserslist: ['last 2 versions'] })]
 
 module.exports = {
 	entry: {
@@ -51,7 +54,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'public/styles/[name].css',
+                            name: 'styles/[name].css',
                         }
                     },
                     {
@@ -61,7 +64,11 @@ module.exports = {
                         loader: 'css-loader?-url'
                     },
                     {
-                        loader: 'postcss-loader'
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: getPostcssPlugins,
+                            sourceMap: false
+                        }    
                     },
                     {
                         loader: 'sass-loader'

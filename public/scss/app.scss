@@ -329,6 +329,11 @@ body{
 				text-transform: uppercase;
 				float: left;
 				margin: 0;
+
+				width: calc(100% - 65px);
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 		}
 	}
