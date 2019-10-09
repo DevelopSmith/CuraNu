@@ -1,7 +1,24 @@
-var utilities = require('../utilities/utilities.js');
+import {sendResJSON} from '../utilities/utilities';
 
-module.exports.getWidgets = function(req, res) {
-	utilities.sendResJSON(res, 200, {
+export const getWidgets = (req, res) => {
+	sendResJSON(res, 200, {
+        accordion: [
+            {
+                title: 'Accordion 1',
+                text: 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore',
+                collapsed: true
+            },
+            {
+                title: 'Accordion 2',
+                text: 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore',
+                collapsed: false
+            },
+            {
+                title: 'Accordion 3',
+                text: 'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore',
+                collapsed: true
+            },
+        ],
         groups: [
             {
                 title: 'HRM',

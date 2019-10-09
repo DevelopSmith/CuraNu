@@ -3,4 +3,6 @@ const sendResJSON = (res, status, content) => {
 	res.json(content);
 };
 
-module.exports.sendResJSON = sendResJSON;
+export {
+	sendResJSON
+}

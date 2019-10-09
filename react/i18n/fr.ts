@@ -9,7 +9,7 @@ const fr = {
     more_blogs: 'plus de blogs',
     my_groups: 'mes groupes',
     add_widget: 'Ajouter un widget',
-    directly_to: 'Direct to',
+    directly_to: 'directement à',
     search: 'Chercher',
     updated: 'mis à jour',
     quality_manual: 'manuel de qualité',

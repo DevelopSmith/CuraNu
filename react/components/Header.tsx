@@ -1,24 +1,32 @@
-import React from "react";
+import React, { Component } from "react";
 import { withTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import Popover from 'react-popover';
 import {SkyLightStateless} from 'react-skylight';
 
-import NotificationsPopover from './NotificationsPopover';
-import {loadUserDetails} from '../actions/userActions';
+// @ts-ignore
+import NotificationsPopover from './NotificationsPopover.tsx';
+// @ts-ignore
+import {loadUserDetails} from '../actions/userActions.ts';
 
-class Header extends React.Component {
+interface IState {
+	showNotificationsPopover: Boolean,
+	showSettingsModal: Boolean,
+	language: string
+}
+
+class Header extends Component<any, IState> {
     state = {
         showNotificationsPopover: false,
 		showSettingsModal: false,
-		language: 'en'
+		language: 'nl'
     }
 
-	toggleNotificationsPopover = status => this.setState({ showNotificationsPopover: status });
-	toggleSettingsModal = status => this.setState({ showSettingsModal: status });
+	toggleNotificationsPopover = (status: Boolean) => this.setState({ showNotificationsPopover: status });
+	toggleSettingsModal = (status: Boolean) => this.setState({ showSettingsModal: status });
 
-    changeLanguage = language => {
+    changeLanguage = (language: string) => {
 		this.setState({ language });
 		this.props.i18n.changeLanguage(language);
     }
@@ -87,7 +95,7 @@ class Header extends React.Component {
 					<div className="square-button" onClick={() => this.toggleSettingsModal(true)}>
 						<img src="/images/black-settings-button.svg" className="img-center" alt={t('settings')} />
 					</div>
-					<Popover {...popoverProps}>
+					<Popover {...popoverProps} place="below">
 						<div className="square-button" onClick={() => this.toggleNotificationsPopover(true)}>
 							<img src="/images/bell.png" className="img-center" alt={t('notifications')} />
 						</div>
@@ -138,13 +146,13 @@ class Header extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: any) => {
 	return {
 		userRdcr: state.userReducer,
 	};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any) => {
 	return {
 		loadUserDetails: () => dispatch(loadUserDetails()),
 	};

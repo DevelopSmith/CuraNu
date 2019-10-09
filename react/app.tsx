@@ -1,23 +1,22 @@
 import React from 'react'
-import { Router, Switch, Route } from "react-router-dom";
+import { Router, Switch, Route } from 'react-router-dom'
 import { render } from 'react-dom'
-import { Provider } from "react-redux";
-import { I18nextProvider } from 'react-i18next';
+import { Provider } from "react-redux"
+import { I18nextProvider } from 'react-i18next'
 
-import store from './store';
-import i18n from './i18n';
-import browserHistory from './helpers/history';
+import store from './store.ts'
+import i18n from './i18n/index.ts'
+import browserHistory from './helpers/history.ts'
 
-import Main from './Main'
-import Events from './pages/Events'
-import News from './pages/News'
-import Blog from './pages/Blog'
-import QualityManual from './pages/QualityManual'
-import Groups from './pages/Groups'
-import Header from './components/Header'
-import { Nothing } from './pages/Nothing';
+import Home from './pages/Home.tsx'
+import Events from './pages/Events.tsx'
+import News from './pages/News.tsx'
+import Blog from './pages/Blog.tsx'
+import QualityManual from './pages/QualityManual.tsx'
+import Groups from './pages/Groups.tsx'
+import Header from './components/Header.tsx'
+import { Nothing } from './pages/Nothing.tsx'
 
-window.React = React
 const parent = document.getElementById('main');
 
 class App extends React.Component {
@@ -29,7 +28,7 @@ class App extends React.Component {
 
 					<Switch>
 						<Route exact path="/">
-							<Main />
+							<Home />
 						</Route>
 						<Route path="/events">
 							<Events />

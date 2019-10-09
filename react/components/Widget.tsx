@@ -1,8 +1,9 @@
-export default props => {
+import React from 'react'
+
+export default (props: any) => {
 	const {
-		children, collapsed,
-		widgetTitle, headerIcon, footerText, footerIcon,
-		collapse, hide, footerAction
+		children, collapsed, collapse, hide,
+		widgetTitle, headerIcon, footerText, footerIcon, footerAction
 	} = props;
 
 	const handleFooterAction = () => {

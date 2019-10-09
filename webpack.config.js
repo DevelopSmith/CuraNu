@@ -1,15 +1,19 @@
+const path = require('path');
+
 module.exports = {
 	entry: {
-		app: './react/app.js',
+		app: './react/app.tsx',
 		styles: './public/scss/app.scss'
 	},
-	output: {
-		filename: "public/scripts/[name]-bundle.js"
-	},
+    output: {
+        path: path.resolve(__dirname, 'public'),
+        filename: 'scripts/[name]-bundle.js'
+    },    
 
-	devtool: "#eval-source-map", // < debugging
+    // devtool: "#eval-source-map", // < debugging
+    mode: 'production',
 	module: {
-		loaders: [
+		rules: [
 			{
 				exclude: /(node_modules|public|app_api|app_server|bin)/,
 				loader: 'babel-loader',
@@ -18,6 +22,16 @@ module.exports = {
 					plugins: ["transform-class-properties"]
 				}
             },
+            {
+                test: /\.tsx?$/,
+                use: [{
+                    loader: 'ts-loader',
+                    options: {
+                      happyPackMode: true
+                    }
+                }],
+                exclude: /node_modules/,
+            },       
             {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',

@@ -1,35 +1,29 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { withTranslation } from 'react-i18next';
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-import {loadWidgetsData} from './actions/widgetsActions';
-import Accordion from './components/Accordion';
+import {loadWidgetsData} from '../actions/widgetsActions.ts';
+import Accordion from '../components/Accordion.tsx';
 
 import {
 	AddWidget, Events, News,
 	DirectLinks, Blogs, QualityManual, Polls, MyLinks,
 	TelephoneBook, Microblog, Groups
-} from './components/Widgets';
+} from '../components/Widgets.tsx';
 
-/**
- * Moves an item from one list to another list.
- */
-const move = (list, old_index, new_index) => {
-    if (new_index >= list.length) {
-        let k = new_index - list.length + 1;
- 
-		while (k--) {
-            list.push(undefined);
-        }
-    }
+interface IWidget {
+	id: string,
+	column: string,
+	hidden: Boolean,
+	collapsed?: Boolean
+}
 
-	list.splice(new_index, 0, list.splice(old_index, 1)[0]);
+interface IState {
+	widgets: IWidget[],
+}
 
-	return list; // for testing
-};
-
-class Main extends React.Component {
+class Main extends Component<any, IState> {
 	state = {
 		widgets: [
 			{
@@ -109,16 +103,30 @@ class Main extends React.Component {
         this.props.loadWidgetsData();
     }
 
-	isCollapsed = id => {
-		const widgets = this.state.widgets;
-		const widget = widgets.find(item => item.id == id)
+	// Moves an item from one list to another list.
+	move = (list: IWidget[], oldIndex: number, newIndex: number) : Array<any> => {
+		if (newIndex >= list.length) {
+			let x = newIndex - list.length + 1;
+	
+			while (x--) {
+				list.push({} as IWidget);
+			}
+		}
+
+		list.splice(newIndex, 0, list.splice(oldIndex, 1)[0]);
+		return list;
+	};
+
+	isCollapsed = (id: string) : Boolean | undefined => {
+		const widgets: IWidget[] = this.state.widgets;
+		const widget = widgets.find((widget: IWidget) => widget.id == id)
 
 		return widget ? widget.collapsed : false;
 	}
 
-	collapse = id => {
-		const widgets = this.state.widgets;
-		const widgetId = widgets.findIndex(item => item.id === id)
+	collapse = (id: string): void => {
+		const widgets: IWidget[] = this.state.widgets;
+		const widgetId = widgets.findIndex((widget: IWidget) => widget.id === id)
 
 		if (widgetId >= 0) {
 			widgets[widgetId].collapsed = !widgets[widgetId].collapsed;
@@ -126,10 +134,9 @@ class Main extends React.Component {
 		}
 	}
 
-	hide = id => {
-		console.log(id);
-		const widgets = this.state.widgets;
-		const widgetId = widgets.findIndex(item => item.id === id)
+	hide = (id: string): void => {
+		const widgets: IWidget[] = this.state.widgets;
+		const widgetId = widgets.findIndex((widget: IWidget) => widget.id === id)
 
 		if (widgetId >= 0) {
 			widgets[widgetId].hidden = true;
@@ -137,20 +144,22 @@ class Main extends React.Component {
 		}
 	}
 
-	getBlockComponent = block => {
+	getBlockComponent = (block: string) => {
 		switch (block) {
 			case 'accordion':
-				return <Accordion />
+				const {accordion} = this.props.widgetsRdcr.widgetsData;
+
+				return <Accordion items={accordion || []} />
 
 			case 'events':
 				const {events} = this.props.widgetsRdcr.widgetsData;
 
-				return <Events data={events || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
+				return <Events items={events || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
 
 			case 'news':
 				const {news} = this.props.widgetsRdcr.widgetsData;
 
-				return <News data={news || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
+				return <News items={news || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
 
 			case 'add_widget':
 				return <AddWidget />
@@ -158,7 +167,7 @@ class Main extends React.Component {
 			case 'direct_links':
 				const {directLinks} = this.props.widgetsRdcr.widgetsData;
 
-				return <DirectLinks data={directLinks || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
+				return <DirectLinks items={directLinks || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
 
 			case 'blogs':
 				const {blog} = this.props.widgetsRdcr.widgetsData;
@@ -168,7 +177,7 @@ class Main extends React.Component {
 			case 'quality_manual':
 				const {qualityManual} = this.props.widgetsRdcr.widgetsData;
 
-				return <QualityManual data={qualityManual || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
+				return <QualityManual items={qualityManual || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
 
 			case 'polls':
 				return <Polls collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
@@ -176,7 +185,7 @@ class Main extends React.Component {
 			case 'my_links':
 				const {myLinks} = this.props.widgetsRdcr.widgetsData;
 
-				return <MyLinks data={myLinks || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
+				return <MyLinks items={myLinks || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
 
 			case 'telebook':
 				return <TelephoneBook />
@@ -187,23 +196,22 @@ class Main extends React.Component {
 			case 'groups':
 				const {groups} = this.props.widgetsRdcr.widgetsData;
 
-				return <Groups data={groups || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
+				return <Groups items={groups || []} collapsed={this.isCollapsed(block)} collapse={() => this.collapse(block)} hide={() => this.hide(block)} />
 
 			default:
 				return <div className="no_block_type" />
 		}
 	}
 
-	onDragEnd = ({ source, destination }) => {
+	onDragEnd = (results: any) => {
+		const { source, destination } = results;
+
 		// dropped outside the list
 		if (!destination) {
 			return;
 		}
 
-		console.log(source);
-		console.log(destination);
-
-		const widgets = this.state.widgets;
+		const widgets: IWidget[] = this.state.widgets;
 		const sourceColumn = this.getList(source.droppableId);
 		const destinationColumn = this.getList(destination.droppableId);
 
@@ -212,17 +220,16 @@ class Main extends React.Component {
 
 		const oldIndex = widgets.findIndex(widget => widget.id == movedWidget.id);
 		const newIndex = widgets.findIndex(widget => widget.id == distinationWidget.id);
-		const reorderedWidgets = move(widgets, oldIndex, newIndex);
+		const reorderedWidgets = this.move(widgets, oldIndex, newIndex);
 
 		if (source.droppableId !== destination.droppableId) {
 			movedWidget.column = destination.droppableId;
 		}
 
-		console.log(oldIndex, newIndex, reorderedWidgets)
 		this.setState({ widgets: reorderedWidgets });
 	}
 
-	getList = columnId => this.state.widgets.filter(item => item.column === columnId && item.hidden === false);
+	getList = (columnId: string) => this.state.widgets.filter(item => item.column === columnId && item.hidden === false);
 
     render(){
 		const col_1 = this.getList('col_1')
@@ -320,13 +327,13 @@ class Main extends React.Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: any) => {
 	return {
 		widgetsRdcr: state.widgetsReducer,
 	};
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch: any) => {
 	return {
 		loadWidgetsData: () => dispatch(loadWidgetsData()),
 	};

@@ -1,4 +1,6 @@
-export const Nothing = (props) => {
+import React from 'react'
+
+export const Nothing = (props: any) => {
 	return(
 		<div id="reset">
 			<div className="container">

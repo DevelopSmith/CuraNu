@@ -1,21 +1,20 @@
-import { get } from 'axios';
+import axios from 'axios';
 
 export const loadUserDetails = () => {
-	return dispatch => {
-		get('/api/user/1', {
+	return (dispatch: any) => {
+		axios.get('/api/user/1', {
 			// headers: {
 			// 	'Authorization': `Bearer ${localStorage.curanuToken}`
 			// }
 		})
-		.then(res => {
+		.then((res: any) => {
 			if(res.status == 200){
-
                 dispatch({
                     type: 'LOADED_USER_DETAILS',
                     payload: res.data
                 });
             }
 		})
-		.catch(err => console.log('ERROR', err));
+		.catch((err: any) => console.log('ERROR', err));
 	};
 }

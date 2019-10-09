@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
+import express from 'express';
+const router = express.Router();
 
-var ctrlUser = require('../controllers/user');
-var ctrlWidget = require('../controllers/widget');
+import * as ctrlUser	from '../controllers/user';
+import * as ctrlWidget	from '../controllers/widget';
 
 // User
 router.get('/user/:id', ctrlUser.getUser);

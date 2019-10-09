@@ -1,13 +1,37 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
+import { withTranslation, WithTranslation } from 'react-i18next';
 
-import Widget from './Widget';
-import history from '../helpers/history';
+// @ts-ignore
+import Widget from './Widget.tsx';
+// @ts-ignore
+import history from '../helpers/history.ts';
 
-export const Events = withTranslation(['translations'], {})(props => {
-    const { data, collapse, collapsed, hide, t } = props;
+interface IEvent {
+    title: string,
+    date: Date
+};
 
-    const eventsHtml = data.map((item, index) => {
+interface IBlog {
+    title: string,
+    date: Date,
+    author: string,
+    avatar: string,
+    comments: number,
+    likes: number
+};
+
+interface IProps extends WithTranslation{
+    items?: any[],
+    blog?: IBlog,
+    collapse: Function,
+    collapsed: Boolean,
+    hide: Function,
+}
+
+export const Events = withTranslation(['translations'], {})((props: IProps) => {
+    const { items, collapse, collapsed, hide, t } = props;
+
+    const eventsHtml = !items ? <div /> : items.map((item: IEvent, index: number) => {
         return <li key={index} className="row">
             <div className="col-4">
                 <span className="item-date">{item.date}</span>
@@ -34,10 +58,10 @@ export const Events = withTranslation(['translations'], {})(props => {
     );
 });
 
-export const News = withTranslation(['translations'], {})(props => {
-    const { data, collapse, collapsed, hide, t } = props;
+export const News = withTranslation(['translations'], {})((props: IProps) => {
+    const { items, collapse, collapsed, hide, t } = props;
 
-    const newsHtml = data.map((item, index) => {
+    const newsHtml = !items ? <div /> : items.map((item, index) => {
         return <li key={index} className="row">
             <div className="col-3">
                 <img src={item.thumb} />
@@ -73,7 +97,7 @@ export const News = withTranslation(['translations'], {})(props => {
     );
 })
 
-export const AddWidget = withTranslation(['translations'], {})(props => {
+export const AddWidget = withTranslation(['translations'], {})((props: IProps) => {
     const { t } = props;
 
 	return(<Widget
@@ -83,10 +107,10 @@ export const AddWidget = withTranslation(['translations'], {})(props => {
 })
 
 // Second Column
-export const DirectLinks = withTranslation(['translations'], {})(props => {
-    const { data, collapse, collapsed, hide, t } = props;
+export const DirectLinks = withTranslation(['translations'], {})((props: IProps) => {
+    const { items, collapse, collapsed, hide, t } = props;
 
-    const directLinksHtml = data.map((item, index) => {
+    const directLinksHtml = !items ? <div /> : items.map((item, index) => {
         return <li key={index} className="row">
             <div className="col-5 has-centered-img">
                 <img className="img-center" src={item.logo} />
@@ -112,8 +136,16 @@ export const DirectLinks = withTranslation(['translations'], {})(props => {
     );
 });
 
-export const Blogs = withTranslation(['translations'], {})(props => {
+export const Blogs = withTranslation(['translations'], {})((props: IProps) => {
     const { blog, collapse, collapsed, hide, t } = props;
+
+    const blogObj = blog || {
+        avatar: '',
+        author: '',
+        date: new Date(),
+        likes: 0,
+        comments: 0
+    };
 
 	return(
         <Widget
@@ -128,18 +160,18 @@ export const Blogs = withTranslation(['translations'], {})(props => {
         >
             <div className="row post-meta">
                 <div className="col-3">
-                    <img src={blog.avatar} />
+                    <img src={blogObj.avatar} />
                 </div>
                 <div className="col-6">
-                    <span className="title pull-left">{blog.author}</span>
+                    <span className="title pull-left">{blogObj.author}</span>
                     <br />
-                    <span className="date">{blog.date}</span>
+                    <span className="date">{blogObj.date}</span>
                 </div>
                 <div className="col-3" style={{textAlign: 'right'}}>
                     <img src="/images/like.svg" style={{height: 15, verticalAlign: 'middle'}} />
-                    <span className="likes-comments-count">{blog.likes || 0}</span>
+                    <span className="likes-comments-count">{blogObj.likes || 0}</span>
                     <img src="/images/comment.svg" style={{marginLeft: 8, verticalAlign: 'middle'}} />
-                    <span className="likes-comments-count">{blog.comments || 0}</span>
+                    <span className="likes-comments-count">{blogObj.comments || 0}</span>
                     <div className="clearfix"></div>
                 </div>
             </div>
@@ -153,10 +185,10 @@ export const Blogs = withTranslation(['translations'], {})(props => {
     );
 });
 
-export const QualityManual = withTranslation(['translations'], {})(props => {
-    const { data, collapse, collapsed, hide, t } = props;
+export const QualityManual = withTranslation(['translations'], {})((props: IProps) => {
+    const { items, collapse, collapsed, hide, t } = props;
 
-    const qualityManualHtml = data.map((item, index) => {
+    const qualityManualHtml = !items ? <div /> : items.map((item, index) => {
         return <li key={index} className="row">
             <span>{item.title}</span>
             <br />
@@ -182,7 +214,7 @@ export const QualityManual = withTranslation(['translations'], {})(props => {
     );
 });
 
-export const Polls = withTranslation(['translations'], {})(props => {
+export const Polls = withTranslation(['translations'], {})((props: IProps) => {
     const { collapse, collapsed, hide, t } = props;
 
 	return(
@@ -198,10 +230,10 @@ export const Polls = withTranslation(['translations'], {})(props => {
     );
 });
 
-export const MyLinks = withTranslation(['translations'], {})(props => {
-    const { data, collapse, collapsed, hide, t } = props;
+export const MyLinks = withTranslation(['translations'], {})((props: IProps) => {
+    const { items, collapse, collapsed, hide, t } = props;
 
-    const myLinksHtml = data.map((item, index) => <li key={index}><a href={item.url}>{item.title}</a></li>)
+    const myLinksHtml = !items ? <div /> : items.map((item, index) => <li key={index}><a href={item.url}>{item.title}</a></li>)
 
 	return(
         <Widget
@@ -219,7 +251,7 @@ export const MyLinks = withTranslation(['translations'], {})(props => {
 });
 
 // Third Column
-class TelephoneBookClass extends React.Component {
+class TelephoneBookClass extends React.Component<any> {
     state = {
         shake: false
     }
@@ -252,7 +284,7 @@ class TelephoneBookClass extends React.Component {
 
 export const TelephoneBook = withTranslation(['translations'], {})(TelephoneBookClass);
 
-export const Microblog = withTranslation(['translations'], {})(props => {
+export const Microblog = withTranslation(['translations'], {})((props: IProps) => {
     const { collapse, collapsed, hide, t } = props;
 
 	return(
@@ -267,7 +299,7 @@ export const Microblog = withTranslation(['translations'], {})(props => {
             hide={hide}
         >
             <div className="microblog-wrap">
-                <textarea className="microblog-input" rows="10"></textarea>
+                <textarea className="microblog-input" rows={10}></textarea>
 
                 <div>
                     <img src="/images/camera.svg" className="pull-left icon" />
@@ -303,10 +335,10 @@ export const Microblog = withTranslation(['translations'], {})(props => {
     );
 });
 
-export const Groups = withTranslation(['translations'], {})(props => {
-    const { data, collapse, collapsed, hide, t } = props;
+export const Groups = withTranslation(['translations'], {})((props: IProps) => {
+    const { items, collapse, collapsed, hide, t } = props;
 
-    const groupsHtml = data.map((item, index) => {
+    const groupsHtml = !items ? <div /> : items.map((item, index) => {
         return <li key={index} className="row">
             <div className="col-3 has-centered-img">
                 <img className="img-center" src={item.logo} />
