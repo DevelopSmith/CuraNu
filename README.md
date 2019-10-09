@@ -33,6 +33,11 @@ You can change the app's language from the **Settings** modal. We can add as man
 ### E2E Testing
 I have implemented `Cypress` for the E2E testing. After installing the dependencies, you can run the following command to run the test results.
 ```
+npm run ci:dev
+```
+
+Or run the following command if you are server is already running on port `3000`
+```
 npm run test
 ```
 
