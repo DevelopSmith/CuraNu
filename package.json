@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "node app.js",
+    "start": "node  -r esm app.js",
     "dev": "nodemon --ignore 'react' --ignore 'public/scripts/*.js' -r esm app.js",
     "test:headless": "cypress run",
     "test": "cypress open",
